@@ -33,15 +33,7 @@ A starting point for automating interactions with Clash of Clans (research/autom
    ```bash
    python script.py
 
-   ###################
-   def automation_task():
-    global running
-    #edit this for longer loop
-    for i in range(0,20):
-        print("Automation started.")
-        main()
-        print("Automation stopped.")
-   ######################
+6.Press F9 to terminate
 
 
 
