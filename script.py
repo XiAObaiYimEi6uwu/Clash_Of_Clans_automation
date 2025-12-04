@@ -1,20 +1,21 @@
-import tkinter as tk
-import threading
 import time
 import pyautogui as pag
 import random
 from pynput.keyboard import Key, Controller
-
-
+import os
+from pynput import keyboard
 
 pag.FAILSAFE = True
 kb = Controller()
-running = False   # global flag
 
 # --- Helper Functions ---
-
-
-
+def on_press(key):
+    try:
+        if key == keyboard.Key.f9:
+            print("F9 pressed, exiting program.")
+            os._exit(0)
+    except Exception:
+        pass
 
 def press_esc(delay=0.05):
     kb.press(Key.esc)
@@ -84,110 +85,68 @@ def click_center_screen(num_clicks=11, bias=20):
         time.sleep(0.01 + random.uniform(0.02, 0.08))
         print(f"Clicked at ({x}, {y}) around center")
 
-
-
-
 # --- Main Sequence ---
 def main():
+    while True:
+
+        # Step 1: Scan for attack map
+        scan_and_click("attack_map.png")
+        # Step 2: Scan for find match
+        scan_and_click("find_match.png")
+        # Step 3: Scan for battle button
+        scan_and_click("battle_button.png")
+        # Step 4: Provide two coordinates for each direction
+        top_start, top_end       = (417,735), (1364,63)
+        bottom_start, bottom_end = (1531,81), (2372,730)
+        left_start, left_end     = (365,938), (1218,1568)
+        right_start, right_end   = (1635,1586), (2483,926)
+        # Step 5: Generate 11 points per line
+        top_points    = generate_line_points(top_start, top_end)
+        bottom_points = generate_line_points(bottom_start, bottom_end)
+        left_points   = generate_line_points(left_start, left_end)
+        right_points  = generate_line_points(right_start, right_end)
+        # Step 6: Replay sequence
+        time.sleep(2)
+        scan_and_click("1.png")
+        for p in top_points: click_position(p)
+        for p in bottom_points: click_position(p)
+        for p in left_points: click_position(p)
+        for p in right_points: click_position(p)
+        scan_and_click("q.png")
+        for p in top_points[3:6]: click_position(p)
+        scan_and_click("w.png")
+        for p in right_points[4:7]: click_position(p)
+        scan_and_click("e.png")
+        for p in bottom_points[4:7]: click_position(p)
+        scan_and_click("r.png")
+        for p in left_points[4:7]: click_position(p)
+        press_together(['q', 'w', 'e', 'r'], hold_time=0.3)
+        scan_and_click("a.png")
+        click_center_screen(num_clicks=11, bias=300)
+        scan_and_click("z.png")
+        click_position(right_points[5])
+        time.sleep(10)
+        # Step 7: Scan for surrender and return home
+        press_esc(delay=0.05)
+        scan_and_click("ok.png")
+        scan_and_click("return_home.png")
+        print("Automation sequence complete.")
 
 
-    # Step 1: Scan for attack map
-    scan_and_click("attack_map.png")
-
-    # Step 2: Scan for find match
-    scan_and_click("find_match.png")
-
-    # Step 3: Scan for battle button
-    scan_and_click("battle_button.png")
-
-    # Step 4: Provide two coordinates for each direction
-    top_start, top_end       = (417,735), (1364,63)
-    bottom_start, bottom_end = (1531,81), (2372,730)
-    left_start, left_end     = (365,938), (1218,1568)
-    right_start, right_end   = (1635,1586), (2483,926)
-
-    # Step 5: Generate 11 points per line
-    top_points    = generate_line_points(top_start, top_end)
-    bottom_points = generate_line_points(bottom_start, bottom_end)
-    left_points   = generate_line_points(left_start, left_end)
-    right_points  = generate_line_points(right_start, right_end)
-
-    # Step 6: Replay sequence
-    time.sleep(2)
-    scan_and_click("1.png")
-    for p in top_points: click_position(p)
-    for p in bottom_points: click_position(p)
-    for p in left_points: click_position(p)
-    for p in right_points: click_position(p)
-
-    scan_and_click("q.png")
-    for p in top_points[3:6]: click_position(p)
-
-    scan_and_click("w.png")
-    for p in right_points[4:7]: click_position(p)
-
-    scan_and_click("e.png")
-    for p in bottom_points[4:7]: click_position(p)
-
-    scan_and_click("r.png")
-    for p in left_points[4:7]: click_position(p)
-
-    press_together(['q', 'w', 'e', 'r'], hold_time=0.3)
-
-    scan_and_click("a.png")
-    click_center_screen(num_clicks=11, bias=100)
-
-
-    scan_and_click("z.png")
-    click_position(right_points[5])
-
-    time.sleep(10)
+listener = keyboard.Listener(on_press=on_press)
+listener.start()
 
 
 
-
-    # Step 7: Scan for surrender and return home
-    press_esc(delay=0.05)
-    scan_and_click("ok.png")
-    scan_and_click("return_home.png")
-
-    print("Automation sequence complete.")
-
-# --- Button actions ---
-def start_task():
-    global running
-    if not running:
-        running = True
-        threading.Thread(target=automation_task, daemon=True).start()
-
-def stop_task():
-    global running
-    running = False
-
-
-def automation_task():
-    global running
-    #edit this for longer loop
-    for i in range(0,20):
-        print("Automation started.")
-        main()
-        print("Automation stopped.")
+if __name__ == "__main__":
+    print("Program running... Press F9 to quit.")
+    time.sleep(3)
+    main()
 
 
 
-# --- GUI setup ---
-root = tk.Tk()
-root.title("Game Automation Controller")
 
-start_button = tk.Button(root, text="Start", command=start_task,
-                         width=15, height=2, bg="green", fg="white")
-start_button.pack(pady=10)
 
-stop_button = tk.Button(root, text="End", command=stop_task,
-                        width=15, height=2, bg="red", fg="white")
-stop_button.pack(pady=10)
-
-root.mainloop()
 
 
 
