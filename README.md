@@ -18,7 +18,7 @@ Features
    .venv\Scripts\activate     # Windows (PowerShell)
    
 2. Install dependencies:
-   ```bash
+   `bash
    pip install -r requirements.txt
 
 
@@ -38,7 +38,7 @@ Features
 
 
 4. Run the main script:
-   ```bash
+   `bash
    python -script.py
 
 
