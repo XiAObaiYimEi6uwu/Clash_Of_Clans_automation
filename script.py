@@ -167,9 +167,11 @@ def stop_task():
 
 def automation_task():
     global running
-    print("Automation started.")
-    main()
-    print("Automation stopped.")
+    #edit this for longer loop
+    for i in range(0,20):
+        print("Automation started.")
+        main()
+        print("Automation stopped.")
 
 
 
@@ -186,6 +188,7 @@ stop_button = tk.Button(root, text="End", command=stop_task,
 stop_button.pack(pady=10)
 
 root.mainloop()
+
 
 
 
