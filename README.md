@@ -16,13 +16,13 @@ Features
    python -m venv .venv
    source .venv/bin/activate   # macOS / Linux
    .venv\Scripts\activate     # Windows (PowerShell)
+   
 2. Install dependencies:
 
    pip install -r requirements.txt
 
 
-################################################################################################
-- Make sure all required image files are downloaded and saved in the same folder as script.py:
+3. Make sure all required image files are downloaded and saved in the same folder as script.py
 - attack_map.png
 - find_match.png
 - battle_button.png
@@ -35,9 +35,9 @@ Features
 - esc.png
 - surrender_button.png
 - return_home.png
-################################################################################################
 
-3. Run the example script:
+
+4. Run the main script:
 
    python -script.py
 
