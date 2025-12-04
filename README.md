@@ -29,8 +29,21 @@ A starting point for automating interactions with Clash of Clans (research/autom
    <img width="2555" height="1322" alt="image" src="https://github.com/user-attachments/assets/6ef42ae0-555b-4f33-acfe-b629355f27ec" />
          
 5. Run the main script:
+  
    ```bash
    python script.py
+
+   ###################
+   def automation_task():
+    global running
+    #edit this for longer loop
+    for i in range(0,20):
+        print("Automation started.")
+        main()
+        print("Automation stopped.")
+   ######################
+
+
 
 
 
