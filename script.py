@@ -6,21 +6,11 @@ import os
 from pynput import keyboard
 import tkinter as tk
 from tkinter import messagebox
-
-# Create a hidden root window
 root = tk.Tk()
-root.withdraw()  # Hide the main window
-
-# Show a pop-up message
+root.withdraw()  
 messagebox.showinfo("system info!", "automation starts in 3 seconds after u press ok")
-
 pag.FAILSAFE = True
 kb = Controller()
-
-
-pag.FAILSAFE = True
-kb = Controller()
-
 # --- Helper Functions ---
 def on_press(key):
     try:
@@ -29,21 +19,18 @@ def on_press(key):
             os._exit(0)
     except Exception:
         pass
-
 def press_esc(delay=0.05):
     kb.press(Key.esc)
     time.sleep(delay)
     kb.release(Key.esc)
 
 def press_together(keys, hold_time=0.2):
-    # Press all keys down
     for k in keys:
         kb.press(k)
     time.sleep(hold_time)
     # Release all keys
     for k in keys:
         kb.release(k)
-
 def scan_and_click(image_path, confidence=0.65, max_retries=10, delay=0.09, post_wait=0.05):
     """Scan screen for an image and click its center if found."""
     for attempt in range(max_retries):
@@ -61,9 +48,7 @@ def scan_and_click(image_path, confidence=0.65, max_retries=10, delay=0.09, post
         time.sleep(delay)
     print(f"Could not find {image_path}")
     return False
-
 def generate_line_points(p1, p2, num_points=11, bias=5):
-    """Generate evenly spaced points between p1 and p2 with gradient and bias."""
     x1, y1 = p1
     x2, y2 = p2
     points = []
@@ -75,12 +60,10 @@ def generate_line_points(p1, p2, num_points=11, bias=5):
         y += random.randint(-bias, bias)
         points.append((int(x), int(y)))
     return points
-
 def click_position(pos, delay=0.01):
     pag.moveTo(pos[0], pos[1], duration=0.05)
     pag.click()
     time.sleep(delay + random.uniform(0.02, 0.08))
-
 def click_center_screen(num_clicks=11, bias=20):
     """
     Click around the center of the screen with small random offsets.
@@ -145,16 +128,14 @@ def main():
         scan_and_click("return_home.png")
         print("Automation sequence complete.")
 
-
 listener = keyboard.Listener(on_press=on_press)
 listener.start()
-
-
 
 if __name__ == "__main__":
     print("Program running... Press F9 to quit.")
     time.sleep(3)
     main()
+
 
 
 
