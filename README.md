@@ -33,7 +33,7 @@ A starting point for automating interactions with Clash of Clans (research/autom
    ```bash
    python script.py
 
-6.Press F9 to terminate
+6. Press F9 to terminate
 
 
 
