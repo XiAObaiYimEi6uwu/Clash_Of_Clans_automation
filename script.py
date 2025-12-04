@@ -4,6 +4,19 @@ import random
 from pynput.keyboard import Key, Controller
 import os
 from pynput import keyboard
+import tkinter as tk
+from tkinter import messagebox
+
+# Create a hidden root window
+root = tk.Tk()
+root.withdraw()  # Hide the main window
+
+# Show a pop-up message
+messagebox.showinfo("system info!", "automation starts in 3 seconds after u press ok")
+
+pag.FAILSAFE = True
+kb = Controller()
+
 
 pag.FAILSAFE = True
 kb = Controller()
@@ -142,6 +155,7 @@ if __name__ == "__main__":
     print("Program running... Press F9 to quit.")
     time.sleep(3)
     main()
+
 
 
 
