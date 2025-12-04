@@ -18,27 +18,27 @@ Features
    .venv\Scripts\activate     # Windows (PowerShell)
    
 2. Install dependencies:
-
+   ```bash
    pip install -r requirements.txt
 
 
 3. Make sure all required image files are downloaded and saved in the same folder as script.py
-- attack_map.png
-- find_match.png
-- battle_button.png
-- q.png
-- w.png
-- e.png
-- r.png
-- a.png
-- z.png
-- esc.png
-- surrender_button.png
-- return_home.png
+      - attack_map.png
+      - find_match.png
+      - battle_button.png
+      - q.png
+      - w.png
+      - e.png
+      - r.png
+      - a.png
+      - z.png
+      - esc.png
+      - surrender_button.png
+      - return_home.png
 
 
 4. Run the main script:
-
+   ```bash
    python -script.py
 
 
