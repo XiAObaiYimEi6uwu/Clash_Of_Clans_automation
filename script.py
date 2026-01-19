@@ -6,11 +6,16 @@ import os
 from pynput import keyboard
 import tkinter as tk
 from tkinter import messagebox
+
+# Create a hidden root window
 root = tk.Tk()
-root.withdraw()  
+root.withdraw()  # Hide the main window
+
+# Show a pop-up message
 messagebox.showinfo("system info!", "automation starts in 3 seconds after u press ok")
 pag.FAILSAFE = True
 kb = Controller()
+
 # --- Helper Functions ---
 def on_press(key):
     try:
@@ -19,18 +24,21 @@ def on_press(key):
             os._exit(0)
     except Exception:
         pass
+
 def press_esc(delay=0.05):
     kb.press(Key.esc)
     time.sleep(delay)
     kb.release(Key.esc)
 
 def press_together(keys, hold_time=0.2):
+    # Press all keys down
     for k in keys:
         kb.press(k)
     time.sleep(hold_time)
     # Release all keys
     for k in keys:
         kb.release(k)
+
 def scan_and_click(image_path, confidence=0.65, max_retries=10, delay=0.09, post_wait=0.05):
     """Scan screen for an image and click its center if found."""
     for attempt in range(max_retries):
@@ -48,7 +56,9 @@ def scan_and_click(image_path, confidence=0.65, max_retries=10, delay=0.09, post
         time.sleep(delay)
     print(f"Could not find {image_path}")
     return False
+
 def generate_line_points(p1, p2, num_points=11, bias=5):
+    """Generate evenly spaced points between p1 and p2 with gradient and bias."""
     x1, y1 = p1
     x2, y2 = p2
     points = []
@@ -60,10 +70,12 @@ def generate_line_points(p1, p2, num_points=11, bias=5):
         y += random.randint(-bias, bias)
         points.append((int(x), int(y)))
     return points
+
 def click_position(pos, delay=0.01):
     pag.moveTo(pos[0], pos[1], duration=0.05)
     pag.click()
     time.sleep(delay + random.uniform(0.02, 0.08))
+
 def click_center_screen(num_clicks=11, bias=20):
     """
     Click around the center of the screen with small random offsets.
@@ -84,7 +96,7 @@ def click_center_screen(num_clicks=11, bias=20):
 # --- Main Sequence ---
 def main():
     while True:
-
+        time.sleep(5)
         # Step 1: Scan for attack map
         scan_and_click("attack_map.png")
         # Step 2: Scan for find match
@@ -102,41 +114,43 @@ def main():
         left_points   = generate_line_points(left_start, left_end)
         right_points  = generate_line_points(right_start, right_end)
         # Step 6: Replay sequence
-        time.sleep(2)
-        scan_and_click("1.png")
+        time.sleep(3)
+        kb.press('1')
+        kb.release('1')
         for p in top_points: click_position(p)
         for p in bottom_points: click_position(p)
         for p in left_points: click_position(p)
         for p in right_points: click_position(p)
-        scan_and_click("q.png")
+        kb.tap('q')
         for p in top_points[3:6]: click_position(p)
-        scan_and_click("w.png")
+        kb.tap('w')
         for p in right_points[4:7]: click_position(p)
-        scan_and_click("e.png")
+        kb.tap('e')
         for p in bottom_points[4:7]: click_position(p)
-        scan_and_click("r.png")
+        kb.tap('r')
         for p in left_points[4:7]: click_position(p)
         press_together(['q', 'w', 'e', 'r'], hold_time=0.3)
-        scan_and_click("a.png")
+        kb.tap('a')
         click_center_screen(num_clicks=11, bias=300)
-        scan_and_click("z.png")
+        kb.tap('z')
         click_position(right_points[5])
-        time.sleep(10)
+        time.sleep(13)
         # Step 7: Scan for surrender and return home
         press_esc(delay=0.05)
         scan_and_click("ok.png")
         scan_and_click("return_home.png")
         print("Automation sequence complete.")
 
+
 listener = keyboard.Listener(on_press=on_press)
 listener.start()
 
+
+
 if __name__ == "__main__":
     print("Program running... Press F9 to quit.")
-    time.sleep(3)
+    time.sleep(1)
     main()
-
-
 
 
 
